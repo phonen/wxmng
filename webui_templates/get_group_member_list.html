@@ -1,0 +1,32 @@
+$def with (bot_id,gid,data)
+<div class="pageContent j-resizeGrid">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a href="/webui/get_group_member_list/?bot_id=$bot_id&gid=$gid" target="navTab" rel="get_group_member_list" class="icon" title="群用户列表"><span>刷新</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="100">
+		<thead>
+			<tr>
+				<th>NickName</th>
+				<th>Username</th>
+				<th>DisplayName</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for temp in data:
+				<tr>
+					<td>$temp['NickName']</td>
+					<td>$temp['UserName']</td>
+					<td>$temp['DisplayName']</td>
+					<td>
+						
+					</td>
+				</tr>
+	</tbody>
+</table>
+<div class="panelBar" >
+	
+</div>
+</div>

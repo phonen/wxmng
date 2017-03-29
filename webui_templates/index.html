@@ -1,0 +1,184 @@
+﻿$def with ()
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信机器人系统_QQ:366084685</title>
+<link rel="icon" href="/static/dwz-ria/favicon.ico" type="image/x-icon" />  
+<link href="/static/dwz-ria/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/static/dwz-ria/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/static/dwz-ria/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<link href="/static/dwz-ria/uploadify/css/uploadify.css" rel="stylesheet" type="text/css" media="screen"/>
+<!--[if IE]>
+<link href="/static/dwz-ria/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
+<![endif]-->
+
+<!--[if lte IE 9]>
+<script src="/static/dwz-ria/js/speedup.js" type="text/javascript"></script>
+<![endif]-->
+
+<script src="/static/dwz-ria/js/jquery-1.7.2.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/js/jquery.validate.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/js/jquery.bgiframe.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/js/jquery.zclip.min.js"  type="text/javascript"></script> 
+<script src="/static/dwz-ria/xheditor/xheditor-1.2.1.min.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/xheditor/xheditor_lang/zh-cn.js" type="text/javascript"></script>
+<script src="/static/dwz-ria/uploadify/scripts/jquery.uploadify.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/static/dwz-ria/chart/raphael.js"></script>
+<script type="text/javascript" src="/static/dwz-ria/chart/g.raphael.js"></script>
+<script type="text/javascript" src="/static/dwz-ria/chart/g.bar.js"></script>
+<script type="text/javascript" src="/static/dwz-ria/chart/g.line.js"></script>
+<script type="text/javascript" src="/static/dwz-ria/chart/g.pie.js"></script>
+<script type="text/javascript" src="/static/dwz-ria/chart/g.dot.js"></script>
+
+<script src="/static/dwz-ria/bin/dwz.min.js" type="text/javascript"></script>
+
+<script src="/static/dwz-ria/js/dwz.regional.zh.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+$$(function(){
+	DWZ.init("/static/dwz-ria/dwz.frag.xml", {
+		//loginUrl:"login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
+		loginUrl:"login.html",	// 跳到登录页面
+		statusCode:{ok:200, error:300, timeout:301}, //【可选】
+		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"orderField", orderDirection:"orderDirection"}, //【可选】
+		keys: {statusCode:"statusCode", message:"message"}, //【可选】
+		ui:{hideMode:'offsets'}, //【可选】hideMode:navTab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
+		debug:false,	// 调试模式 【true|false】
+		callback:function(){
+			initEnv();
+			$$("#themeList").theme({themeBase:"/static/dwz-ria/themes"}); // themeBase 相对于index页面的主题base路径
+		}
+	});
+});
+</script>
+</head>
+
+<body scroll="no">
+	<div id="layout">
+		<div id="header">
+			<div class="headerNav">
+				<a class="logo" href="#">标志</a>
+				<ul class="nav">
+					<li><span style="color:red;">欢迎</span></li>
+					<li><span style="color:white;">admin</span></li>
+					<li><a href="/login.html">退出</a></li>
+				</ul>
+				<ul class="themeList" id="themeList">
+					<li theme="default"><div class="selected">蓝色</div></li>
+					<li theme="green"><div>绿色</div></li>
+					<li theme="red"><div>红色</div></li>
+					<li theme="purple"><div>紫色</div></li>
+					<li theme="silver"><div>银色</div></li>
+					<li theme="azure"><div>天蓝</div></li>
+				</ul>
+			</div>
+
+			<!-- navMenu -->
+			
+		</div>
+
+		<div id="leftside">
+			<div id="sidebar_s">
+				<div class="collapse">
+					<div class="toggleCollapse"><div></div></div>
+				</div>
+			</div>
+			<div id="sidebar">
+				<div class="toggleCollapse"><h2>主菜单</h2><div>收缩</div></div>
+
+				<div class="accordion" fillSpace="sidebar">
+					<div class="accordionHeader">
+						<h2><span>Folder</span>操作菜单</h2>
+					</div>
+					<div class="accordionContent">
+						<ul class="tree treeFolder expand">
+							<li><a href="#" >账号管理</a>
+								<ul>
+									<li tabid="main" class="main"><a href="/webui/bot_list/" target="navTab" rel="bot_list">微信账号列表</a></li>
+								</ul>
+							</li>
+							<!--
+							<li><a href="#" >常用工具</a>
+								<ul>
+									<li><a href="/alimama/" target="navTab" rel="alimama">alimama接口</a></li>
+									<li><a href="/tkl/" target="navTab" rel="tkl">淘口令生成</a></li>	
+								</ul>
+							</li>
+							<li><a href="#" >参数配置</a>
+								<ul>
+									<li><a href="/alimama_setting/" target="navTab" rel="alimama_setting">阿里妈妈设置</a></li>
+									<li><a href="/group_setting/" target="navTab" rel="group_setting">群控设置</a></li>
+									<li><a href="/weixin_setting/" target="navTab" rel="weixin_setting">微信设置</a></li>
+									<li><a href="/collect_setting/" target="navTab" rel="collect_setting">采集设置</a></li>
+								</ul>
+							</li>
+							-->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="container">
+			<div id="navTab"  class="tabsPage">
+				<div class="tabsPageHeader">
+					<div class="tabsPageHeaderMargin">
+						<ul class="navTab-tab">
+							<li tabid="main" class="main"><a href="javascript:;"><span><span class="home_icon">我的主页</span></span></a></li>
+						</ul>
+					</div>
+					<div class="tabsLeft">left</div>
+					<div class="tabsRight">right</div>
+					<div class="tabsMore">more</div>
+				</div>	
+				<ul class="tabsMoreList">
+					<li><a href="javascript:;">我的主页</a></li>
+				</ul>
+				<div class="navTab-panel tabsPageContent layoutBox">
+					<div class="page unitBox">	
+						<div class="accountInfo">
+							<div class="alertInfo">
+								<p><a href="https://github.com/liuwons/wxBot" target="_blank" style="line-height:19px"><span>Wxbot使用手册</span></a></p>
+								<p><a href="/static/webapi.html" target="_blank" style="line-height:19px">Wxbot-webapi文档</a></p>
+							</div>
+							<p><span>WXBOT多开&插件化管理框架</span></p>
+							<p>WXBOT官方GIT仓库:<a href="https://github.com/liuwons/wxBot" target="_blank">https://github.com/liuwons/wxBot</a></p>
+						</div>
+						<div class="pageFormContent" layoutH="80" >
+
+
+						<h2>微信协议相关资料:</h2>
+						<div class="unit"><a href="http://www.tanhao.me/talk/1466.html/" target="_blank">挖掘微信Web版通信的全过程</a></div>
+						<div class="unit"><a href="http://www.blogjava.net/yongboy/archive/2015/11/05/410636.html" target="_blank">微信协议简单调研笔记</a></div>
+						<div class="unit"><a href="https://github.com/xiangzhai/qwx" target="_blank">qwx: WeChat Qt frontend 微信Qt前端</a></div>
+
+						<div class="divider"></div>
+						<h2>常见问题及解决:</h2>
+						<pre style="margin:5px;line-height:1.4em">
+1、插件配置如何设置？
+    待完善！！
+						</pre>
+
+						<div class="divider"></div>
+						<h2>有偿服务(<span style="color:red;">购买源码、二次开发、定制微信机器人，解决使用过程中出现的全部疑难问题</span>):</h2><br/>
+						<pre style="margin:5px;line-height:1.4em;">
+微信：vivre90
+QQ：366084685
+邮箱：vivre@vivre.cn
+						</pre>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id="footer">Copyright &copy; 2010 <a href="http://bbs.vivre.cn/" target="_blank">微信机器人系统_QQ:366084685</a> 
+</div>
+</body>
+</html>

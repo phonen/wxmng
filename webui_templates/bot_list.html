@@ -1,0 +1,56 @@
+$def with (bot_list)
+<div class="pageContent j-resizeGrid">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a href="/webui/wx_login/"  target="navTab" class="add"  rel="wx_start"><span>启动</span></a></li>
+			<li class="line">line</li>
+			<li><a href="/webui/bot_list/" target="navTab" rel="bot_list" class="icon" title="微信账号列表"><span>刷新</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="100">
+		<thead>
+			<tr>
+			    <th>启动时间</th>
+				<th>bot_id</th>
+				<th>微信名</th></th>
+				<th>微信UID</th>
+				<th>联系人数量</th>
+				<th>群数量</th>
+				<th>当前状态</th>
+				<th>插件配置</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for temp in bot_list['data']:
+				<tr>
+				    <td>$temp['bot_start_time']</td>
+					<td>$temp['bot_id']</td>
+					<td>$temp['bot_account_name']</td>
+					<td>$temp['bot_account_uin']</td>
+					<td>
+						<a title="联系人列表" target="navTab" rel="get_contact_list" href="/webui/get_contact_list/?bot_id=$temp['bot_id']" >$temp['bot_contact_num']</a>
+					</td>
+					<td>
+					    <a title="群列表" target="navTab" rel="get_group_list" href="/webui/get_group_list/?bot_id=$temp['bot_id']" >$temp['bot_group_num']</a>
+					</td>
+					    
+					$if temp['bot_status'] == 'loginsuccess':
+					    <td><span style="line-height:21px; color:GREEN;">状态正常</span></td>
+					$if temp['bot_status'] == 'wait4login':
+					    <td><span style="line-height:21px; color:BLACK;">等待扫码</span></td>
+					$if temp['bot_status'] == 'loginout':
+					    <td><span style="line-height:21px; color:RED;">已经退出</span></td>
+				    <td>
+						<a title="插件配置" target="navTab" rel="get_bot_conf" href="/webui/get_bot_conf/?bot_id=$temp['bot_id']" >插件配置</a>
+					</td>
+					<td>
+						<a title="删除" target="ajaxTodo" href="/webui/delete_wxbot/?bot_id=$temp['bot_id']" class="btnDel">退出</a>
+					</td>
+				</tr>
+	</tbody>
+</table>
+<div class="panelBar" >
+	
+</div>
+</div>

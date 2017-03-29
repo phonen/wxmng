@@ -1,0 +1,42 @@
+$def with (bot_id,data)
+<div class="pageContent j-resizeGrid">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a href="/webui/get_contact_list/?bot_id=$bot_id" target="navTab" rel="get_contact_list" class="icon" title="微信账号列表"><span>刷新</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="100">
+		<thead>
+			<tr>
+				<th>NickName</th>
+				<th>Username</th>
+				<th>Province</th></th>
+				<th>City</th>
+				<th>DisplayName</th>
+				<th>RemarkName</th>
+				<th>Sex</th>
+				<th>Signature</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for temp in data['data']['contact_list']:
+				<tr>
+					<td>$temp['NickName']</td>
+					<td>$temp['UserName']</td>
+					<td>$temp['Province']</td>
+					<td>$temp['City']</td>
+					<td>$temp['DisplayName']</td>
+					<td>$temp['RemarkName']</td>
+					<td>$temp['Sex']</td>
+					<td>$temp['Signature']</td>
+					<td>
+						
+					</td>
+				</tr>
+	</tbody>
+</table>
+<div class="panelBar" >
+	
+</div>
+</div>

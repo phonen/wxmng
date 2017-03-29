@@ -1,0 +1,10 @@
+http://127.0.0.1:8080/api/wx_login/
+http://127.0.0.1:8080/api/get_wxbot_status/
+http://127.0.0.1:8080/api/restart_wxbot/?bot_id=AYVwTs2bHQ==
+http://127.0.0.1:8080/api/update_contact/?bot_id=IYPkk_VLoQ==
+http://127.0.0.1:8080/api/get_my_account/?bot_id=IYPkk_VLoQ==
+http://127.0.0.1:8080/api/get_contact_list/?bot_id=IYPkk_VLoQ==
+http://127.0.0.1:8080/api/get_group_list/?bot_id=IYPkk_VLoQ==
+http://127.0.0.1:8080/api/get_group_members/?bot_id=IYPkk_VLoQ==
+http://127.0.0.1:8080/api/send_msg_by_uid/?bot_id=IYPkk_VLoQ==&word=xxxxxxx&uid=@@0e3ae65375f9d6a31bcfec761a2d87b597526472dd1c7f817578ca6b89249fe3
+http://127.0.0.1:8080/api/send_file_msg_by_uid/?bot_id=IYPkk_VLoQ==&fpath=http://www.baidu.com/111.jpg&uid=@@0e3ae65375f9d6a31bcfec761a2d87b597526472dd1c7f817578ca6b89249fe3
