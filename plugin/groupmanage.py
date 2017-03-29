@@ -6,6 +6,8 @@ import json
 import web
 import re
 import os
+import requests
+import time
 
 def run(WXBOT,msg,plugin_name):
 	try:
@@ -13,6 +15,7 @@ def run(WXBOT,msg,plugin_name):
 	except:
 		WXBOT.bot_conf[plugin_name] ={
 			'switch':True,
+			'site_url': 'http://13bag.com/',
 			'db_name':'weixin.db',
 			'welcome_msg':u'欢迎《%s》入群',
 			'switch_allow_change_gname':False
@@ -24,6 +27,7 @@ def run(WXBOT,msg,plugin_name):
 	group_invit_2		=  re.compile(u'(.*?)通过扫描(.*?)分享的二维码加入群聊')
 	group_delete		=  re.compile(u'(.*?)将(.*?)移出了群聊')
 	group_name_change   =  re.compile(u'(.*?)修改群名为(.*?)')
+	admin_account_list = ['abc','cba']
 
 
 	if WXBOT.bot_conf[plugin_name]['switch'] == True and (msg['msg_type_id'] == 3 and msg['content']['type'] == 0):
@@ -31,10 +35,18 @@ def run(WXBOT,msg,plugin_name):
 			pass  #未处理！！！
 
 		try:
-			if msg['content']['detail'][0]['type'] == 'at' and msg['content']['user']['name'] in admin_account_list:  
-				if msg['content']['desc'] == u'踢':
-					print u'[INFO] 收到管理命令：%s-->踢掉-->%s'%(msg['user']['name'],msg['content']['detail'][0]['value'])
-					WXBOT.delete_user_from_group(msg['content']['detail'][0]['value'],msg['user']['id'])
+			if msg['content']['detail'][0]['type'] == 'at':
+				if msg['content']['desc'] == 'noads':
+					if msg['content']['user']['name'] in admin_account_list:
+						print u'[INFO] 收到管理命令：%s-->踢掉-->%s' % (
+						msg['user']['name'], msg['content']['detail'][0]['value'])
+						WXBOT.delete_user_from_group(msg['content']['detail'][0]['value'], msg['user']['id'])
+					else:
+						reply = isproxy(WXBOT.bot_conf[plugin_name]['site_url'],msg['user']['name'], msg['content']['user']['name'])
+						if reply == "ok":
+							print u'[INFO] 收到管理命令：%s-->踢掉-->%s' % (msg['user']['name'], msg['content']['detail'][0]['value'])
+							WXBOT.delete_user_from_group(msg['content']['detail'][0]['value'], msg['user']['id'])
+
 		except Exception,e:
 			pass
 
@@ -44,8 +56,8 @@ def run(WXBOT,msg,plugin_name):
 		#匹配主动邀请
 		result = group_invit_1.findall(msg['content']['data'])
 		if len(result)!= 0 :
-			 #如果是自己邀请得就pass吧
-			if  result[0][0] != u'你': 
+			#如果是自己邀请得就pass吧
+			if  result[0][0] != u'你':
 				for be_inviter in result[0][1].split(u'、'):
 					try:
 						web_db.insert('group_invt_log',
@@ -53,7 +65,7 @@ def run(WXBOT,msg,plugin_name):
 							inviter	 =  result[0][0][1:-1],
 							be_inviter  =  be_inviter[1:-1],
 							invite_time =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) ,
-							type		=  0 
+							type		=  0
 							)
 					except Exception,e:
 						pass
@@ -63,7 +75,7 @@ def run(WXBOT,msg,plugin_name):
 		result = group_invit_2.findall(msg['content']['data'])
 		if len(result)!= 0:
 			#如果是自己邀请得就pass吧
-			if  result[0][0] != u'你': 
+			if  result[0][0] != u'你':
 				for be_inviter in result[0][0].split(u'、'):
 					try:
 						web_db.insert('group_invt_log',
@@ -80,17 +92,17 @@ def run(WXBOT,msg,plugin_name):
 		if len(result)!= 0:
 			for be_deleter in result[0][0].split(u'、'):
 				try:
-					 web_db.insert('group_delete_log',
+					web_db.insert('group_delete_log',
 							group_name  =  msg['user']['name'],
 							deleter	 =  result[0][1][1:-1],   #被踢得人
-							delete_time =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+							delete_time =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 							)
 				except Exception,e:
 					pass
 		#匹配群名称修改消息
 		result = group_name_change.findall(msg['content']['data'])
 		if len(result)!= 0:
-			if  result[0][0] != u'你': 
+			if  result[0][0] != u'你':
 				try:
 					#判断一下是否允许修改群名，不允许的话将修改群名回去
 					if WXBOT.bot_conf[plugin_name]['switch_allow_change_gname'] == 'False':
@@ -100,3 +112,12 @@ def run(WXBOT,msg,plugin_name):
 					pass
 		#WXBOT.get_contact()
 		return
+
+
+def isproxy(site_url,group, proxywx):
+	post_data = {'proxywx': proxywx, 'group': group}
+	post_url = site_url + '?g=Tbkqq&m=WxAi&a=isproxy'
+	r = requests.post(post_url, post_data)
+	r.encoding = 'utf-8'
+	f = r.text.encode('utf-8')
+	return f
