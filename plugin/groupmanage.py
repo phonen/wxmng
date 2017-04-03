@@ -18,6 +18,7 @@ def run(WXBOT,msg,plugin_name):
 			'site_url': 'http://13bag.com/',
 			'db_name':'weixin.db',
 			'welcome_msg':u'欢迎《%s》入群',
+			'admin_account_list': [u'小V', u'小白'],
 			'switch_allow_change_gname':False
 		}
 		return
@@ -27,7 +28,7 @@ def run(WXBOT,msg,plugin_name):
 	group_invit_2		=  re.compile(u'(.*?)通过扫描(.*?)分享的二维码加入群聊')
 	group_delete		=  re.compile(u'(.*?)将(.*?)移出了群聊')
 	group_name_change   =  re.compile(u'(.*?)修改群名为(.*?)')
-	admin_account_list = ['abc','cba']
+
 
 
 	if WXBOT.bot_conf[plugin_name]['switch'] == True and (msg['msg_type_id'] == 3 and msg['content']['type'] == 0):
@@ -37,7 +38,7 @@ def run(WXBOT,msg,plugin_name):
 		try:
 			if msg['content']['detail'][0]['type'] == 'at':
 				if msg['content']['desc'] == 'noads':
-					if msg['content']['user']['name'] in admin_account_list:
+					if msg['content']['user']['name'] in WXBOT.bot_conf[plugin_name]['admin_account_list']:
 						print u'[INFO] 收到管理命令：%s-->踢掉-->%s' % (
 						msg['user']['name'], msg['content']['detail'][0]['value'])
 						WXBOT.delete_user_from_group(msg['content']['detail'][0]['value'], msg['user']['id'])

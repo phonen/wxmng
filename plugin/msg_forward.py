@@ -21,6 +21,7 @@ def run(WXBOT, msg, plugin_name):
             'alimama_adzoneid': '59576937',
             'alimama_sign_account': 'ca387a0f250083076b1b2168c824881f',
             'site_url':'http://13bag.com/',
+            'fromwx':'yangxianggui',
             'message_send_with_coupons': u'发现优惠券啦！复制这条信息%s，打开【手机淘宝】可领取本群专属手机优惠劵【%s元】在下单购买！如果无法领取说明代金券已经领取完！',
             'message_send_with_fanli': u'复制本内容%s,打开【手机淘宝】下单并确认收货后将订单号私聊我，可以领取商家红包【%s元】！有问题可以私聊咨询我！',
             'message_search_fail': u'没有相关优惠，换个试试吧～'
@@ -47,12 +48,35 @@ def run(WXBOT, msg, plugin_name):
                     search_url_pattern = re.compile(u"[a-zA-z]+://[^\s]*")
                     Command_result = search_url_pattern.findall(msg['content']['desc'])
                     if len(Command_result) > 0:
-                        iid = search_iid_from_url(Command_result[0])
+                        #iid = search_iid_from_url(Command_result[0])
                         print u'[INFO] LOG-->Command_result:%s' % (str(Command_result))
-                        if iid != '':
-                           print u'[INFO] TBK发现商品ID-->%s' % (iid)
-                        result, data = A_MAMA.search_item_info_by_iid(iid)
-                        send_search_result_to_uid(WXBOT, A_MAMA, data, msg, '', iid, plugin_name)
+                        if msg['content']['user']['name'] == 'unknown':
+                            reply = u'机器人认不到你哦，请联系人工客服'
+                        elif WXBOT.bot_conf[plugin_name]['fromwx'] == msg['content']['user']['name']:
+                            reply = get_taoke_link(WXBOT.bot_conf[plugin_name]['site_url'], msg['user']['name'],
+                                           msg['content']['user']['name'], msg['content']['desc'], '1')
+                        else:
+                            reply = get_taoke_link(WXBOT.bot_conf[plugin_name]['site_url'], msg['user']['name'],
+                                           msg['content']['user']['name'], msg['content']['desc'], '')
+                        WXBOT.send_msg_by_uid(
+                            reply,
+                            msg['user']['id'])
+                    elif msg['content']['desc'].find('taotehui') == 0:
+                        num = msg['content']['desc'][-3:]
+                        if msg['content']['user']['name'] == 'unknown':
+                            reply = u'机器人认不到你哦，请联系人工客服'
+                        elif num.isdigit():
+                            reply = save_proxy(WXBOT.bot_conf[plugin_name]['site_url'],msg['content']['user']['name'], msg['content']['desc'])
+
+                        else:
+                            reply = '@' + msg['content']['user']['name'] + ': ' + u'代理编号不正确哦'
+
+
+                        #if iid != '':
+                        #   print u'[INFO] TBK发现商品ID-->%s' % (iid)
+                        #result, data = A_MAMA.search_item_info_by_iid(iid)
+                        #send_search_result_to_uid(WXBOT, A_MAMA, data, msg, '', iid, plugin_name)
+
                     else:
 
                         WXBOT.send_msg_by_uid(
@@ -158,7 +182,7 @@ def save_proxy(site_url,proxywx, msg):
 
 
 def search_iid_from_url(x):
-	#从消息中提取的url来进行iid的提取，这个函数代扩容！！
+    #从消息中提取的url来进行iid的提取，这个函数代扩容！！
 	search_iid_pattern =  re.compile(u"(http|https)://(item\.taobao\.com|detail\.tmall\.com)/(.*?)id=(\d*)")
 	search_iid_pattern_2 = re.compile(u'(http|https)://(a\.m\.taobao\.com)/i(\d*)\.htm')
 	r = requests.get(x,headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36'})
@@ -186,7 +210,7 @@ def send_search_result_to_uid(WXBOT,A_MAMA,data,msg,skey=None,iid=None,plugin_na
 		send_item_pic_to_uid(WXBOT,item_info,msg)
 		time.sleep(0.5)
 		try:
-		    #尝试获取2合1的淘口令,整合代金券
+            #尝试获取2合1的淘口令,整合代金券
 			sclick_data['data']['couponLinkTaoToken']
 			WXBOT.send_msg_by_uid(WXBOT.bot_conf[plugin_name]['message_send_with_coupons']%(sclick_data['data']['couponLinkTaoToken'],item_info['couponAmount']),msg['user']['id'])
 		except:
